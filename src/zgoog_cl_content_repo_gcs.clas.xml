@@ -1,0 +1,399 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<abapGit version="v1.0.0" serializer="LCL_OBJECT_CLAS" serializer_version="v1.0.0">
+ <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
+  <asx:values>
+   <VSEOCLASS>
+    <CLSNAME>ZGOOG_CL_CONTENT_REPO_GCS</CLSNAME>
+    <LANGU>E</LANGU>
+    <DESCRIPT>Google Cloud Storage: Content Server Interface</DESCRIPT>
+    <STATE>1</STATE>
+    <CLSCCINCL>X</CLSCCINCL>
+    <FIXPT>X</FIXPT>
+    <UNICODE>X</UNICODE>
+   </VSEOCLASS>
+   <TPOOL>
+    <item>
+     <ID>I</ID>
+     <KEY>001</KEY>
+     <ENTRY>Service user should not be used</ENTRY>
+     <LENGTH>50</LENGTH>
+    </item>
+    <item>
+     <ID>I</ID>
+     <KEY>002</KEY>
+     <ENTRY>Explicit logon required</ENTRY>
+     <LENGTH>32</LENGTH>
+    </item>
+   </TPOOL>
+   <I18N_TPOOL>
+    <item>
+     <LANGUAGE>1</LANGUAGE>
+     <TEXTPOOL>
+      <item>
+       <ID>I</ID>
+       <KEY>001</KEY>
+       <ENTRY>无法使用服务用户</ENTRY>
+       <LENGTH>50</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>002</KEY>
+       <ENTRY>必需的外部登录</ENTRY>
+       <LENGTH>32</LENGTH>
+      </item>
+     </TEXTPOOL>
+    </item>
+    <item>
+     <LANGUAGE>D</LANGUAGE>
+     <TEXTPOOL>
+      <item>
+       <ID>I</ID>
+       <KEY>001</KEY>
+       <ENTRY>Service-Benutzer darf nicht verwendet werden</ENTRY>
+       <LENGTH>50</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>002</KEY>
+       <ENTRY>Explizite Anmeldung erforderlich</ENTRY>
+       <LENGTH>32</LENGTH>
+      </item>
+     </TEXTPOOL>
+    </item>
+    <item>
+     <LANGUAGE>F</LANGUAGE>
+     <TEXTPOOL>
+      <item>
+       <ID>I</ID>
+       <KEY>001</KEY>
+       <ENTRY>Utilisateur type Service ne doit pas être utilisé</ENTRY>
+       <LENGTH>50</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>002</KEY>
+       <ENTRY>Connexion explicite nécessaire</ENTRY>
+       <LENGTH>32</LENGTH>
+      </item>
+     </TEXTPOOL>
+    </item>
+    <item>
+     <LANGUAGE>J</LANGUAGE>
+     <TEXTPOOL>
+      <item>
+       <ID>I</ID>
+       <KEY>001</KEY>
+       <ENTRY>サービスユーザ使用不可</ENTRY>
+       <LENGTH>50</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>002</KEY>
+       <ENTRY>明示ログオン必須</ENTRY>
+       <LENGTH>32</LENGTH>
+      </item>
+     </TEXTPOOL>
+    </item>
+    <item>
+     <LANGUAGE>P</LANGUAGE>
+     <TEXTPOOL>
+      <item>
+       <ID>I</ID>
+       <KEY>001</KEY>
+       <ENTRY>Não é permitido utilizar usuário de serviço</ENTRY>
+       <LENGTH>50</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>002</KEY>
+       <ENTRY>Logon explícito obrigatório</ENTRY>
+       <LENGTH>32</LENGTH>
+      </item>
+     </TEXTPOOL>
+    </item>
+    <item>
+     <LANGUAGE>R</LANGUAGE>
+     <TEXTPOOL>
+      <item>
+       <ID>I</ID>
+       <KEY>001</KEY>
+       <ENTRY>Сервисный пользователь не может быть использован</ENTRY>
+       <LENGTH>50</LENGTH>
+      </item>
+      <item>
+       <ID>I</ID>
+       <KEY>002</KEY>
+       <ENTRY>Необходима отдельная регистрация</ENTRY>
+       <LENGTH>32</LENGTH>
+      </item>
+     </TEXTPOOL>
+    </item>
+   </I18N_TPOOL>
+   <DESCRIPTIONS>
+    <SEOCOMPOTX>
+     <CMPNAME>ATTR_SEARCH</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Attribute Search</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>ATTR_SEARCH_INNER</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Attribute Search Inner</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>BODY_ADD_FIELD</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Output Lines in Body</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>BODY_PUT_FIELD</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Output Lines in Body</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>CHECK_AUTHORITY</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Test Administration Authorizations</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>CHECK_EXPIRATION</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Test Expiry Date</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>CHECK_PARAMETER_CONSISTENCE</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Test Consistency of Parameters</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>CHECK_SIGNATURE</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Test Signature</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>CONVERT_UPPER_LOWER</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Convert to upper and lower cases</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>DOC_SEARCH</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Doc Search</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>FIND_CODEPAGE</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Find Code Page</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>FORMAT_DATE_AND_TIME</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Format Date for Header Field</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>FORMAT_STATUS</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Format Status for Header Field</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>FORMAT_TIMESTAMP</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Format Date for Header Field</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GET_LANGUAGE_FOR_CODEPAGE</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Get Language for Code Page</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GET_PARAMETER</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Determine Value of Parameter</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GET_PARAMETER_B</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Determine Value of Parameter</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GET_PARAMETER_C</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Determine Value of Parameter</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>GET_PARAMETER_I</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Determine Value of Parameter</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>INIT</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Initialize Instance</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>LOAD_GOOG_REPO_CONFIG</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Read Google Repo Configuration</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>PARSE_URI</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Extract Command and Parameters</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>PROCESS_ADMINCONTREP</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Process adminContRep Request</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>PROCESS_APPEND</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Process append Request</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>PROCESS_ATTRSEARCH</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Process attrSearch Request</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>PROCESS_CREATE</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Process create Request</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>PROCESS_CREATE_POST</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Process create Request</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>PROCESS_DELETE</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Process delete Request</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>PROCESS_DOCGET</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Process docGet Request</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>PROCESS_GET</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Process docGet Request</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>PROCESS_INFO</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Process info Request</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>PROCESS_MCREATE_POST</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Process mCreate Request</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>PROCESS_PUTCERT</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Process putCert Request</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>PROCESS_REP_CERTGET</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Process certGet Request</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>PROCESS_REP_CERTSET</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Process certGet Request</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>PROCESS_REP_CONFIGGET</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Process configGet Request</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>PROCESS_REP_STATGET</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Process configGet Request</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>PROCESS_SEARCH</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Process search Request</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>PROCESS_SERVERINFO</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Process serverInfo Request</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>PROCESS_UPDATE</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Process update Request</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>PROCESS_UPDATE_POST</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Process update Request</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>REPORT_ERROR</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Format Error Message</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>SEARCH_BINARY</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Search Binary</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>SEARCH_BINARY_2</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Search Binary</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>SET_ERROR</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Set Error</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>SET_LOCALE_FOR_CODEPAGE</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Set Locale for Code Page</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>SYS_ERROR_SET</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Copy SY Error Messages</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>TRANSLATE</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Translate</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>URL_HEX_DECODE</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Undo Hex Coding in URL</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>URL_HEX_DECODE_X</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Hex Decode</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
+     <CMPNAME>VERIFY_SIGNATURE</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Check signature</DESCRIPT>
+    </SEOCOMPOTX>
+   </DESCRIPTIONS>
+   <DESCRIPTIONS_SUB>
+    <SEOSUBCOTX>
+     <CMPNAME>LOAD_GOOG_REPO_CONFIG</CMPNAME>
+     <SCONAME>IV_CONTREP</SCONAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Content Repository Identification</DESCRIPT>
+    </SEOSUBCOTX>
+   </DESCRIPTIONS_SUB>
+  </asx:values>
+ </asx:abap>
+</abapGit>
