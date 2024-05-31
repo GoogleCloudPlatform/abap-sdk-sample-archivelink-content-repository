@@ -12,245 +12,245 @@
 *  See the License for the specific language governing permissions   *
 *  and limitations under the License.                                *
 **********************************************************************
-class ZGOOG_CL_CONTENT_REPO_GCS definition
-  public
-  final
-  create public .
+CLASS zgoog_cl_content_repo_gcs DEFINITION
+  PUBLIC
+  FINAL
+  CREATE PUBLIC .
 
-public section.
-  type-pools SCMST .
+  PUBLIC SECTION.
+    TYPE-POOLS scmst .
 
-  interfaces IF_HTTP_EXTENSION .
-private section.
+    INTERFACES if_http_extension .
+  PRIVATE SECTION.
 
-  types:
+    TYPES:
 *"* private components of class ZGOOG_CL_CONTENT_REPO_GCS
 *"* do not include other source files here!!!
-    BEGIN OF gtyp_s_comp_data,
+      BEGIN OF gtyp_s_comp_data,
         comp_id   TYPE string,
         mime_type TYPE string,
         data      TYPE xstring,
       END OF gtyp_s_comp_data .
-  types GTYP_S_REPO_CONFIG type ZGOOG_CONT_REPO .
-  types:
-    gtyp_t_attr_result TYPE STANDARD TABLE OF scms_reatr WITH DEFAULT KEY .
+    TYPES gtyp_s_repo_config TYPE zgoog_cont_repo .
+    TYPES:
+      gtyp_t_attr_result TYPE STANDARD TABLE OF scms_reatr WITH DEFAULT KEY .
 
-  data GV_DOCPROT type STRING .
-  data GV_NL type STRING .
-  data GV_SP type STRING .
-  data GV_MANDT type SYMANDT .
-  data GV_BODY type STRING .
-  data GS_ERROR type LTYP_S_ERROR .
-  data GO_SERVER type ref to IF_HTTP_SERVER .
-  data GV_MODE type STRING .
-  data GV_COMMAND type STRING .
-  data GT_PARAMETERS type LTYP_T_PARAMETERS .
-  data GV_CONTREP type STRING .
-  data GV_CREP_TYPE type SCMS_CRTYP .
-  data GS_REPO_CONFIG type GTYP_S_REPO_CONFIG .
-  constants C_PARAMETER_UNKNOWN type I value 0 ##NO_TEXT.
-  constants C_PARAMETER_USED type I value 1 ##NO_TEXT.
-  data GV_PARAMETER_SEC_USED type I value 2 ##NO_TEXT.
-  constants C_PARAMETER_MISSING type I value 3 ##NO_TEXT.
-  class-data:
-    gv_cd_mode TYPE c LENGTH 1 value ' ' ##NO_TEXT.
+    DATA gv_docprot TYPE string .
+    DATA gv_nl TYPE string .
+    DATA gv_sp TYPE string .
+    DATA gv_mandt TYPE symandt .
+    DATA gv_body TYPE string .
+    DATA gs_error TYPE ltyp_s_error .
+    DATA go_server TYPE REF TO if_http_server .
+    DATA gv_mode TYPE string .
+    DATA gv_command TYPE string .
+    DATA gt_parameters TYPE ltyp_t_parameters .
+    DATA gv_contrep TYPE string .
+    DATA gv_crep_type TYPE scms_crtyp .
+    DATA gs_repo_config TYPE gtyp_s_repo_config .
+    CONSTANTS c_parameter_unknown TYPE i VALUE 0 ##NO_TEXT.
+    CONSTANTS c_parameter_used TYPE i VALUE 1 ##NO_TEXT.
+    DATA gv_parameter_sec_used TYPE i VALUE 2 ##NO_TEXT.
+    CONSTANTS c_parameter_missing TYPE i VALUE 3 ##NO_TEXT.
+    CLASS-DATA:
+      gv_cd_mode TYPE c LENGTH 1 VALUE ' ' ##NO_TEXT.
 
-  methods LOAD_GOOG_REPO_CONFIG
-    importing
-      !IV_CONTREP type SAEARCHIVI .
-  methods INIT .
-  methods PARSE_URI .
-  methods URL_HEX_DECODE
-    importing
-      !IV_VALUE type STRING
-    returning
-      value(RV_RESULT) type STRING .
-  methods BODY_ADD_FIELD
-    importing
-      !IV_NAME type STRING
-      !IV_VALUE type STRING .
-  methods BODY_PUT_FIELD
-    importing
-      !IV_NAME type STRING
-      !IV_VALUE type STRING .
-  methods SYS_ERROR_SET .
-  methods REPORT_ERROR .
-  methods GET_PARAMETER
-    importing
-      !IV_NAME type STRING
-      !IV_DEFAULT type STRING optional
-      !IV_MANDATORY type C default SPACE
-      !IV_RAW_MODE type ABAP_BOOL default ABAP_FALSE
-    returning
-      value(RV_VALUE) type STRING .
-  methods GET_PARAMETER_B
-    importing
-      !IV_NAME type STRING
-      !IV_DEFAULT type I optional
-      !IV_MANDATORY type C default SPACE
-    returning
-      value(RV_VALUE) type SY-DATAR .
-  methods GET_PARAMETER_I
-    importing
-      !IV_NAME type STRING
-      !IV_DEFAULT type I optional
-      !IV_MANDATORY type C default SPACE
-    returning
-      value(RV_VALUE) type I .
-  methods GET_PARAMETER_C
-    importing
-      !IV_NAME type STRING
-      !IV_DEFAULT type STRING optional
-      !IV_MANDATORY type C default SPACE
-      !IV_RAW_MODE type ABAP_BOOL default ABAP_FALSE
-    exporting
-      !EV_VALUE_S type STRING
-      !EV_VALUE_C type C
-      !ER_VALUE type ref to DATA .
-  methods CHECK_PARAMETER_CONSISTENCE .
-  methods CHECK_EXPIRATION
-    importing
-      !IV_EXPIRATION type STRING .
-  methods CHECK_AUTHORITY
-    importing
-      value(IV_READ) type I default 0
-      value(IV_WRITE) type I default 0 .
-  methods VERIFY_SIGNATURE
-    importing
-      !IV_SECKEY type STRING
-      !IV_MESSAGE type STRING
-      !IV_CONTREP type STRING
-      !IV_AUTHID type STRING .
-  methods CHECK_SIGNATURE
-    importing
-      !IV_DOCPROT type STRING
-      value(IV_CONTREP) type STRING optional
-    returning
-      value(RV_SIGNATURE) type SY-DATAR .
-  methods PROCESS_INFO .
-  methods PROCESS_GET .
-  methods PROCESS_DOCGET .
-  methods PROCESS_CREATE .
-  methods PROCESS_CREATE_POST .
-  methods PROCESS_MCREATE_POST .
-  methods PROCESS_APPEND .
-  methods PROCESS_UPDATE .
-  methods PROCESS_UPDATE_POST .
-  methods PROCESS_DELETE .
-  methods PROCESS_SEARCH .
-  methods PROCESS_ATTRSEARCH .
-  methods PROCESS_PUTCERT .
-  methods PROCESS_SERVERINFO .
-  methods PROCESS_ADMINCONTREP .
-  methods PROCESS_REP_CONFIGGET .
-  methods PROCESS_REP_STATGET .
-  methods PROCESS_REP_CERTGET .
-  methods PROCESS_REP_CERTSET .
-  class-methods FORMAT_TIMESTAMP
-    importing
-      !IV_TIMESTAMP type N
-    exporting
-      !EV_DATE type STRING
-      !EV_TIME type STRING .
-  class-methods FORMAT_STATUS
-    importing
-      !IV_STATUS type C
-    returning
-      value(RV_STATUS_TEXT) type STRING .
-  class-methods FORMAT_DATE_AND_TIME
-    importing
-      !IV_DATE_IN type D
-      !IV_TIME_IN type T
-    exporting
-      !EV_DATE type STRING
-      !EV_TIME type STRING .
-  methods SET_ERROR
-    importing
-      !IV_CODE type I
-      !IV_TEXT type STRING .
-  methods FIND_CODEPAGE
-    importing
-      !IV_DATA_BUFFER type XSTRING
-    returning
-      value(RV_CODEPAGE) type ABAP_ENCODING .
-  methods TRANSLATE
-    importing
-      !IV_BUFFER type XSTRING
-      !IV_CODEPAGE type ABAP_ENCODING
-    changing
-      !CV_CLINE type STRING .
-  methods URL_HEX_DECODE_X
-    importing
-      !IV_IN type CSEQUENCE
-    returning
-      value(RV_OUT) type XSTRING .
-  methods CONVERT_UPPER_LOWER
-    importing
-      !IV_PATTERN type XSTRING
-      !IV_ENCODING type ABAP_ENCODING
-    exporting
-      !EV_UPPER type XSTRING
-      !EV_LOWER type XSTRING .
-  methods SET_LOCALE_FOR_CODEPAGE
-    importing
-      !IV_CODEPAGE type CPCODEPAGE .
-  methods GET_LANGUAGE_FOR_CODEPAGE
-    importing
-      !IV_CODEPAGE type CPCODEPAGE
-    returning
-      value(RV_LANGUAGE) type SY-LANGU .
-  methods DOC_SEARCH
-    importing
-      value(IV_CREP_ID) type C default SPACE
-      value(IV_DOC_ID) type C
-      value(IV_COMP_ID) type C default SPACE
-      value(IV_SEARCH_TEXT) type C default SPACE
-      value(IV_OFFSET) type I default 0
-      value(IV_TO_OFFSET) type I default -1
-      value(IV_CASE_SENSITIVE) type C default SPACE
-      value(IV_NUM_RESULTS) type I default 1
-      value(IV_SIGNATURE) type C default 'X'
-      value(IV_SECURITY) type C
-      value(IV_RAW_PATTERN) type C default SPACE
-    exporting
-      !ET_RESULT type STANDARD TABLE .
-  methods SEARCH_BINARY_2
-    importing
-      !IV_BUFFER type XSTRING
-      !IV_PATTERN type XSTRING
-      !IV_PATTERN2 type XSTRING
-    changing
-      !CV_POS type I .
-  methods SEARCH_BINARY
-    importing
-      !IV_BUFFER type XSTRING
-      !IV_PATTERN type XSTRING
-    changing
-      !CV_POS type I .
-  methods ATTR_SEARCH
-    importing
-      value(IV_CREP_ID) type C default SPACE
-      value(IV_DOC_ID) type C
-      value(IV_FROM_OFFSET) type I default 0
-      value(IV_TO_OFFSET) type I default -1
-      value(IV_CASE_SENSITIVE) type C default SPACE
-      value(IV_NUM_RESULTS) type I default 1
-      value(IV_SIGNATURE) type C default 'X'
-      value(IV_SECURITY) type C
-      value(IV_PATTERN) type C default SPACE
-    exporting
-      !ET_RESULT type GTYP_T_ATTR_RESULT .
-  methods ATTR_SEARCH_INNER
-    importing
-      !IV_FROM type I
-      !IV_TO type I
-      !IV_CASE_SENSITIVE type C
-      !IV_REVERSE type C
-      !IV_DATA_BUFFER type XSTRING
-      !IV_DESCR_BUFFER type XSTRING
-      !IV_PATTERN type C
-    changing
-      !CT_RESULT type GTYP_T_ATTR_RESULT .
+    METHODS load_goog_repo_config
+      IMPORTING
+        !iv_contrep TYPE saearchivi .
+    METHODS init .
+    METHODS parse_uri .
+    METHODS url_hex_decode
+      IMPORTING
+        !iv_value        TYPE string
+      RETURNING
+        VALUE(rv_result) TYPE string .
+    METHODS body_add_field
+      IMPORTING
+        !iv_name  TYPE string
+        !iv_value TYPE string .
+    METHODS body_put_field
+      IMPORTING
+        !iv_name  TYPE string
+        !iv_value TYPE string .
+    METHODS sys_error_set .
+    METHODS report_error .
+    METHODS get_parameter
+      IMPORTING
+        !iv_name        TYPE string
+        !iv_default     TYPE string OPTIONAL
+        !iv_mandatory   TYPE c DEFAULT space
+        !iv_raw_mode    TYPE abap_bool DEFAULT abap_false
+      RETURNING
+        VALUE(rv_value) TYPE string .
+    METHODS get_parameter_b
+      IMPORTING
+        !iv_name        TYPE string
+        !iv_default     TYPE i OPTIONAL
+        !iv_mandatory   TYPE c DEFAULT space
+      RETURNING
+        VALUE(rv_value) TYPE sy-datar .
+    METHODS get_parameter_i
+      IMPORTING
+        !iv_name        TYPE string
+        !iv_default     TYPE i OPTIONAL
+        !iv_mandatory   TYPE c DEFAULT space
+      RETURNING
+        VALUE(rv_value) TYPE i .
+    METHODS get_parameter_c
+      IMPORTING
+        !iv_name      TYPE string
+        !iv_default   TYPE string OPTIONAL
+        !iv_mandatory TYPE c DEFAULT space
+        !iv_raw_mode  TYPE abap_bool DEFAULT abap_false
+      EXPORTING
+        !ev_value_s   TYPE string
+        !ev_value_c   TYPE c
+        !er_value     TYPE REF TO data .
+    METHODS check_parameter_consistence .
+    METHODS check_expiration
+      IMPORTING
+        !iv_expiration TYPE string .
+    METHODS check_authority
+      IMPORTING
+        VALUE(iv_read)  TYPE i DEFAULT 0
+        VALUE(iv_write) TYPE i DEFAULT 0 .
+    METHODS verify_signature
+      IMPORTING
+        !iv_seckey  TYPE string
+        !iv_message TYPE string
+        !iv_contrep TYPE string
+        !iv_authid  TYPE string .
+    METHODS check_signature
+      IMPORTING
+        !iv_docprot         TYPE string
+        VALUE(iv_contrep)   TYPE string OPTIONAL
+      RETURNING
+        VALUE(rv_signature) TYPE sy-datar .
+    METHODS process_info .
+    METHODS process_get .
+    METHODS process_docget .
+    METHODS process_create .
+    METHODS process_create_post .
+    METHODS process_mcreate_post .
+    METHODS process_append .
+    METHODS process_update .
+    METHODS process_update_post .
+    METHODS process_delete .
+    METHODS process_search .
+    METHODS process_attrsearch .
+    METHODS process_putcert .
+    METHODS process_serverinfo .
+    METHODS process_admincontrep .
+    METHODS process_rep_configget .
+    METHODS process_rep_statget .
+    METHODS process_rep_certget .
+    METHODS process_rep_certset .
+    CLASS-METHODS format_timestamp
+      IMPORTING
+        !iv_timestamp TYPE n
+      EXPORTING
+        !ev_date      TYPE string
+        !ev_time      TYPE string .
+    CLASS-METHODS format_status
+      IMPORTING
+        !iv_status            TYPE c
+      RETURNING
+        VALUE(rv_status_text) TYPE string .
+    CLASS-METHODS format_date_and_time
+      IMPORTING
+        !iv_date_in TYPE d
+        !iv_time_in TYPE t
+      EXPORTING
+        !ev_date    TYPE string
+        !ev_time    TYPE string .
+    METHODS set_error
+      IMPORTING
+        !iv_code TYPE i
+        !iv_text TYPE string .
+    METHODS find_codepage
+      IMPORTING
+        !iv_data_buffer    TYPE xstring
+      RETURNING
+        VALUE(rv_codepage) TYPE abap_encoding .
+    METHODS translate
+      IMPORTING
+        !iv_buffer   TYPE xstring
+        !iv_codepage TYPE abap_encoding
+      CHANGING
+        !cv_cline    TYPE string .
+    METHODS url_hex_decode_x
+      IMPORTING
+        !iv_in        TYPE csequence
+      RETURNING
+        VALUE(rv_out) TYPE xstring .
+    METHODS convert_upper_lower
+      IMPORTING
+        !iv_pattern  TYPE xstring
+        !iv_encoding TYPE abap_encoding
+      EXPORTING
+        !ev_upper    TYPE xstring
+        !ev_lower    TYPE xstring .
+    METHODS set_locale_for_codepage
+      IMPORTING
+        !iv_codepage TYPE cpcodepage .
+    METHODS get_language_for_codepage
+      IMPORTING
+        !iv_codepage       TYPE cpcodepage
+      RETURNING
+        VALUE(rv_language) TYPE sy-langu .
+    METHODS doc_search
+      IMPORTING
+        VALUE(iv_crep_id)        TYPE c DEFAULT space
+        VALUE(iv_doc_id)         TYPE c
+        VALUE(iv_comp_id)        TYPE c DEFAULT space
+        VALUE(iv_search_text)    TYPE c DEFAULT space
+        VALUE(iv_offset)         TYPE i DEFAULT 0
+        VALUE(iv_to_offset)      TYPE i DEFAULT -1
+        VALUE(iv_case_sensitive) TYPE c DEFAULT space
+        VALUE(iv_num_results)    TYPE i DEFAULT 1
+        VALUE(iv_signature)      TYPE c DEFAULT 'X'
+        VALUE(iv_security)       TYPE c
+        VALUE(iv_raw_pattern)    TYPE c DEFAULT space
+      EXPORTING
+        !et_result               TYPE STANDARD TABLE .
+    METHODS search_binary_2
+      IMPORTING
+        !iv_buffer   TYPE xstring
+        !iv_pattern  TYPE xstring
+        !iv_pattern2 TYPE xstring
+      CHANGING
+        !cv_pos      TYPE i .
+    METHODS search_binary
+      IMPORTING
+        !iv_buffer  TYPE xstring
+        !iv_pattern TYPE xstring
+      CHANGING
+        !cv_pos     TYPE i .
+    METHODS attr_search
+      IMPORTING
+        VALUE(iv_crep_id)        TYPE c DEFAULT space
+        VALUE(iv_doc_id)         TYPE c
+        VALUE(iv_from_offset)    TYPE i DEFAULT 0
+        VALUE(iv_to_offset)      TYPE i DEFAULT -1
+        VALUE(iv_case_sensitive) TYPE c DEFAULT space
+        VALUE(iv_num_results)    TYPE i DEFAULT 1
+        VALUE(iv_signature)      TYPE c DEFAULT 'X'
+        VALUE(iv_security)       TYPE c
+        VALUE(iv_pattern)        TYPE c DEFAULT space
+      EXPORTING
+        !et_result               TYPE gtyp_t_attr_result .
+    METHODS attr_search_inner
+      IMPORTING
+        !iv_from           TYPE i
+        !iv_to             TYPE i
+        !iv_case_sensitive TYPE c
+        !iv_reverse        TYPE c
+        !iv_data_buffer    TYPE xstring
+        !iv_descr_buffer   TYPE xstring
+        !iv_pattern        TYPE c
+      CHANGING
+        !ct_result         TYPE gtyp_t_attr_result .
 ENDCLASS.
 
 
@@ -266,7 +266,7 @@ CLASS ZGOOG_CL_CONTENT_REPO_GCS IMPLEMENTATION.
 
       ltt_off TYPE STANDARD TABLE OF lty_off.
 
-    DATA: lo_gcs           TYPE REF TO /goog/cl_storage_v1,
+    DATA: lo_gcs           TYPE REF TO zgoog_cl_storage_cont_repo_v1,
           lo_abap_sdk_excp TYPE REF TO /goog/cx_sdk.
 
     DATA: lv_p_bucket       TYPE string,
@@ -912,27 +912,26 @@ CLASS ZGOOG_CL_CONTENT_REPO_GCS IMPLEMENTATION.
 
       ltt_off TYPE STANDARD TABLE OF lty_off.
 
-    DATA: lo_gcs           TYPE REF TO /goog/cl_storage_v1,
+    DATA: lo_gcs           TYPE REF TO zgoog_cl_storage_cont_repo_v1,
           lo_abap_sdk_excp TYPE REF TO /goog/cx_sdk.
 
-    DATA: lv_p_bucket       TYPE string,
-          lv_p_object       TYPE string,
-          lv_ret_code       TYPE i,
-          lv_err_text       TYPE string,
-          lv_buffer         TYPE xstring,
-          lv_msg            TYPE string,
-          lv_codepage       TYPE abap_encoding,
-          lv_pattern        TYPE xstring,
-          lv_case_sensitive TYPE c LENGTH 1,
-          lv_upper          TYPE xstring,
-          lv_lower          TYPE xstring,
-          lv_max_offset     TYPE i,
-          lv_offset         TYPE i,
-          lv_pos            TYPE i,
-          ls_off            TYPE lty_off,
-          lt_off            TYPE ltt_off,
-          lv_cnt            TYPE i,
-          lv_pos1           TYPE char20.
+    DATA: lv_p_bucket   TYPE string,
+          lv_p_object   TYPE string,
+          lv_ret_code   TYPE i,
+          lv_err_text   TYPE string,
+          lv_buffer     TYPE xstring,
+          lv_msg        TYPE string,
+          lv_codepage   TYPE abap_encoding,
+          lv_pattern    TYPE xstring,
+          lv_upper      TYPE xstring,
+          lv_lower      TYPE xstring,
+          lv_max_offset TYPE i,
+          lv_offset     TYPE i,
+          lv_pos        TYPE i,
+          ls_off        TYPE lty_off,
+          lt_off        TYPE ltt_off,
+          lv_cnt        TYPE i,
+          lv_pos1       TYPE char20.
 
     load_goog_repo_config( iv_crep_id ).
     IF gs_error IS NOT INITIAL.
@@ -976,7 +975,7 @@ CLASS ZGOOG_CL_CONTENT_REPO_GCS IMPLEMENTATION.
       lv_pattern = iv_search_text.
     ENDIF.
 
-    IF lv_case_sensitive = space.
+    IF iv_case_sensitive = space.
 
       convert_upper_lower( EXPORTING iv_pattern  = lv_pattern
                                      iv_encoding = lv_codepage
@@ -985,7 +984,7 @@ CLASS ZGOOG_CL_CONTENT_REPO_GCS IMPLEMENTATION.
 
       IF     lv_pattern = lv_upper
          AND lv_pattern = lv_lower.
-        lv_case_sensitive = 'X'.
+        iv_case_sensitive = 'X'.
       ENDIF.
     ELSE.
       lv_upper = lv_pattern.
@@ -1013,7 +1012,7 @@ CLASS ZGOOG_CL_CONTENT_REPO_GCS IMPLEMENTATION.
     " Do search
     SHIFT lv_buffer LEFT BY lv_offset PLACES IN BYTE MODE.
     WHILE lv_buffer IS NOT INITIAL AND lv_offset <= lv_max_offset.
-      IF lv_case_sensitive = space.
+      IF iv_case_sensitive = space.
         search_binary_2( EXPORTING iv_buffer   = lv_buffer
                                    iv_pattern  = lv_lower
                                    iv_pattern2 = lv_upper
@@ -1254,7 +1253,7 @@ CLASS ZGOOG_CL_CONTENT_REPO_GCS IMPLEMENTATION.
       lv_len = 1.
     ENDIF.
 
-    create data er_value type c length lv_len.
+    CREATE DATA er_value TYPE c LENGTH lv_len.
     ASSIGN er_value->* TO <lv_char>.
     <lv_char> = ev_value_s.
   ENDMETHOD.
@@ -1280,6 +1279,7 @@ CLASS ZGOOG_CL_CONTENT_REPO_GCS IMPLEMENTATION.
 
 
   METHOD if_http_extension~handle_request.
+
     go_server = server.
     go_server->response->if_http_entity~suppress_content_type( ).
     init( ).
@@ -1296,7 +1296,6 @@ CLASS ZGOOG_CL_CONTENT_REPO_GCS IMPLEMENTATION.
         CASE gv_command.
           WHEN 'info'. process_info( ).
           WHEN 'get'. process_get( ).
-*          WHEN 'getPDF'. process_get_rfc( ).  " Not required
           WHEN 'docGet'. process_docget( ).
           WHEN 'delete'. process_delete( ).
           WHEN 'search'. process_search( ).
@@ -1469,7 +1468,7 @@ CLASS ZGOOG_CL_CONTENT_REPO_GCS IMPLEMENTATION.
     DATA: lo_contrep       TYPE REF TO data,
           lo_docid         TYPE REF TO data,
           lo_compid        TYPE REF TO data,
-          lo_gcs           TYPE REF TO /goog/cl_storage_v1,
+          lo_gcs           TYPE REF TO zgoog_cl_storage_cont_repo_v1,
           lo_entity        TYPE REF TO if_http_entity,
           lo_abap_sdk_excp TYPE REF TO /goog/cx_sdk.
 
@@ -1736,7 +1735,7 @@ CLASS ZGOOG_CL_CONTENT_REPO_GCS IMPLEMENTATION.
           lo_compid        TYPE REF TO data,
           lo_docprot       TYPE REF TO data,
           lo_entity        TYPE REF TO if_http_entity,
-          lo_gcs           TYPE REF TO /goog/cl_storage_v1,
+          lo_gcs           TYPE REF TO zgoog_cl_storage_cont_repo_v1,
           lo_abap_sdk_excp TYPE REF TO /goog/cx_sdk.
 
     DATA: lv_compid      TYPE string,
@@ -1759,11 +1758,11 @@ CLASS ZGOOG_CL_CONTENT_REPO_GCS IMPLEMENTATION.
     DATA: lt_bin   TYPE STANDARD TABLE OF sdokcntbin,
           lt_infos TYPE STANDARD TABLE OF scms_acinf.
 
-    FIELD-SYMBOLS: <lv_contrep>   TYPE c,
-                   <lv_docid>     TYPE c,
-                   <lv_compid>    TYPE c,
-                   <lv_docprot>   TYPE c,
-                   <ls_info>      TYPE scms_acinf.
+    FIELD-SYMBOLS: <lv_contrep> TYPE c,
+                   <lv_docid>   TYPE c,
+                   <lv_compid>  TYPE c,
+                   <lv_docprot> TYPE c,
+                   <ls_info>    TYPE scms_acinf.
 
     get_parameter_c( EXPORTING iv_name      = 'contRep'
                                iv_mandatory = 'S'
@@ -1904,7 +1903,7 @@ CLASS ZGOOG_CL_CONTENT_REPO_GCS IMPLEMENTATION.
     DATA: lo_contrep       TYPE REF TO data,
           lo_docid         TYPE REF TO data,
           lo_docprot       TYPE REF TO data,
-          lo_gcs           TYPE REF TO /goog/cl_storage_v1,
+          lo_gcs           TYPE REF TO zgoog_cl_storage_cont_repo_v1,
           lo_abap_sdk_excp TYPE REF TO /goog/cx_sdk,
           lo_entity        TYPE REF TO if_http_entity.
 
@@ -2090,7 +2089,7 @@ CLASS ZGOOG_CL_CONTENT_REPO_GCS IMPLEMENTATION.
     DATA: lo_contrep       TYPE REF TO data,
           lo_docid         TYPE REF TO data,
           lo_abap_sdk_excp TYPE REF TO /goog/cx_sdk,
-          lo_gcs           TYPE REF TO /goog/cl_storage_v1,
+          lo_gcs           TYPE REF TO zgoog_cl_storage_cont_repo_v1,
           lo_compid        TYPE REF TO data.
 
     DATA: lv_pversion       TYPE string ##NEEDED,
@@ -2256,7 +2255,7 @@ CLASS ZGOOG_CL_CONTENT_REPO_GCS IMPLEMENTATION.
 
     DATA: lo_contrep       TYPE REF TO data,
           lo_docid         TYPE REF TO data,
-          lo_gcs           TYPE REF TO /goog/cl_storage_v1,
+          lo_gcs           TYPE REF TO zgoog_cl_storage_cont_repo_v1,
           lo_struc         TYPE REF TO cl_abap_structdescr,
           lo_entity        TYPE REF TO if_http_entity,
           lo_abap_sdk_excp TYPE REF TO /goog/cx_sdk.
@@ -2562,7 +2561,7 @@ CLASS ZGOOG_CL_CONTENT_REPO_GCS IMPLEMENTATION.
     DATA: lo_contrep       TYPE REF TO data,
           lo_docid         TYPE REF TO data,
           lo_compid        TYPE REF TO data,
-          lo_gcs           TYPE REF TO /goog/cl_storage_v1,
+          lo_gcs           TYPE REF TO zgoog_cl_storage_cont_repo_v1,
           lo_struc         TYPE REF TO cl_abap_structdescr,
           ls_component     TYPE REF TO abap_compdescr,
           lo_abap_sdk_excp TYPE REF TO /goog/cx_sdk,
@@ -2958,6 +2957,7 @@ CLASS ZGOOG_CL_CONTENT_REPO_GCS IMPLEMENTATION.
                                INTO lv_dummy ##NO_TEXT.
         sys_error_set( ).
         gs_error-status_code = 500.
+        RETURN.
     ENDTRY.
 
     go_server->response->set_status( code   = 200
@@ -2970,7 +2970,7 @@ CLASS ZGOOG_CL_CONTENT_REPO_GCS IMPLEMENTATION.
 
     DATA: lo_docid         TYPE REF TO data,
           lo_contrep       TYPE REF TO data,
-          lo_gcs           TYPE REF TO /goog/cl_storage_v1,
+          lo_gcs           TYPE REF TO zgoog_cl_storage_cont_repo_v1,
           lo_struc         TYPE REF TO cl_abap_structdescr,
           lo_component     TYPE REF TO abap_compdescr,
           lo_abap_sdk_excp TYPE REF TO /goog/cx_sdk,
@@ -3300,7 +3300,7 @@ CLASS ZGOOG_CL_CONTENT_REPO_GCS IMPLEMENTATION.
     DATA: lo_contrep       TYPE REF TO data,
           lo_docprot       TYPE REF TO data,
           lo_docid         TYPE REF TO data,
-          lo_gcs           TYPE REF TO /goog/cl_storage_v1,
+          lo_gcs           TYPE REF TO zgoog_cl_storage_cont_repo_v1,
           lo_abap_sdk_excp TYPE REF TO /goog/cx_sdk,
           lo_entity        TYPE REF TO if_http_entity.
 
@@ -4060,7 +4060,7 @@ CLASS ZGOOG_CL_CONTENT_REPO_GCS IMPLEMENTATION.
         crep_id TYPE crep-crep_id,
       END OF lty_crep.
 
-    DATA: lo_gcs           TYPE REF TO /goog/cl_storage_v1,
+    DATA: lo_gcs           TYPE REF TO zgoog_cl_storage_cont_repo_v1,
           lo_entity        TYPE REF TO if_http_entity,
           lo_abap_sdk_excp TYPE REF TO /goog/cx_sdk.
 
@@ -4072,7 +4072,7 @@ CLASS ZGOOG_CL_CONTENT_REPO_GCS IMPLEMENTATION.
           lv_date        TYPE string,
           lv_time        TYPE string,
           lv_contrep     TYPE string,
-          lv_contrep1    TYPE SAEARCHIVI,
+          lv_contrep1    TYPE saearchivi,
           lv_pversion    TYPE string,
           lv_resultas    TYPE string,
           lv_descript_c  TYPE crepdescr-descript,
@@ -4233,7 +4233,7 @@ CLASS ZGOOG_CL_CONTENT_REPO_GCS IMPLEMENTATION.
           lo_compid        TYPE REF TO data,
           lo_abap_sdk_excp TYPE REF TO /goog/cx_sdk,
           lo_entity        TYPE REF TO if_http_entity,
-          lo_gcs           TYPE REF TO /goog/cl_storage_v1.
+          lo_gcs           TYPE REF TO zgoog_cl_storage_cont_repo_v1.
 
     DATA: lv_compid      TYPE string,
           lv_pversion    TYPE string ##NEEDED,
@@ -4365,7 +4365,7 @@ CLASS ZGOOG_CL_CONTENT_REPO_GCS IMPLEMENTATION.
           lo_docid         TYPE REF TO data,
           lo_abap_sdk_excp TYPE REF TO /goog/cx_sdk,
           lo_entity        TYPE REF TO if_http_entity,
-          lo_gcs           TYPE REF TO /goog/cl_storage_v1.
+          lo_gcs           TYPE REF TO zgoog_cl_storage_cont_repo_v1.
 
     DATA: lv_pversion    TYPE string ##NEEDED,
           lv_seckey      TYPE string,
@@ -4639,12 +4639,12 @@ CLASS ZGOOG_CL_CONTENT_REPO_GCS IMPLEMENTATION.
 
 
   METHOD search_binary_2.
-    DATA lv_l  TYPE i.
-    DATA lv_l2 TYPE i.
-    DATA lv_n  TYPE i.
-    DATA lv_p  TYPE i.
-    DATA lv_pb TYPE i.
-    DATA lv_pp TYPE i.
+    DATA: lv_l  TYPE i,
+          lv_l2 TYPE i,
+          lv_n  TYPE i,
+          lv_p  TYPE i,
+          lv_pb TYPE i,
+          lv_pp TYPE i.
 
     lv_l = xstrlen( iv_pattern ).
     lv_l2 = xstrlen( iv_pattern ).
@@ -4664,20 +4664,20 @@ CLASS ZGOOG_CL_CONTENT_REPO_GCS IMPLEMENTATION.
     lv_p = 0.
     WHILE lv_p <= lv_n.
       lv_pb = lv_p.
-      lv_p = 0.
+      lv_pp = 0.
       WHILE lv_pp < lv_l.
         IF     iv_buffer+lv_pb(1) <> iv_pattern+lv_pp(1)
            AND iv_buffer+lv_pb(1) <> iv_pattern2+lv_pp(1).
           EXIT.
         ENDIF.
-        lv_pp += 1.
-        lv_pb += 1.
+        lv_pp = lv_pp + 1.
+        lv_pb = lv_pb + 1.
       ENDWHILE.
-      IF lv_p = lv_l.
+      IF lv_pp = lv_l.
         cv_pos = lv_p.
         EXIT.
       ENDIF.
-      lv_p += 1.
+      lv_p = lv_p + 1.
     ENDWHILE.
   ENDMETHOD.
 
@@ -4782,11 +4782,13 @@ CLASS ZGOOG_CL_CONTENT_REPO_GCS IMPLEMENTATION.
 
 
   METHOD url_hex_decode_x.
-    DATA lv_buffer  TYPE string.
+
     DATA lo_convout TYPE REF TO cl_abap_conv_out_ce.
-    DATA lv_hex     TYPE c LENGTH 2.
-    DATA lv_x       TYPE x LENGTH 1.
-    DATA lv_c       TYPE c LENGTH 1.
+
+    DATA: lv_buffer TYPE string,
+          lv_hex    TYPE c LENGTH 2,
+          lv_x      TYPE x,
+          lv_c      TYPE c.
 
     CLEAR rv_out.
     lv_buffer = iv_in.
@@ -4811,6 +4813,7 @@ CLASS ZGOOG_CL_CONTENT_REPO_GCS IMPLEMENTATION.
         SHIFT lv_buffer LEFT BY 1 PLACES.
       ENDIF.
     ENDWHILE.
+
   ENDMETHOD.
 
 
