@@ -500,7 +500,7 @@ CLASS ZGOOG_CL_CONTENT_REPO_GCS IMPLEMENTATION.
         ENDIF.
       ENDIF.
 
-      lv_offset += lv_line_len + 1.
+      lv_offset = lv_offset + lv_line_len + 1.
     ENDWHILE.
   ENDMETHOD.
 
@@ -781,21 +781,9 @@ CLASS ZGOOG_CL_CONTENT_REPO_GCS IMPLEMENTATION.
       ENDIF.
 
       IF lv_contrep <> space.
-        SELECT SINGLE http_nosig FROM crep_r3db
+        SELECT SINGLE http_nosig FROM crep_http
           INTO lv_nosig
           WHERE crep_id = lv_contrep.
-
-        IF sy-subrc <> 0.
-          SELECT SINGLE http_nosig FROM crep_stor
-            INTO lv_nosig
-            WHERE crep_id = lv_contrep.
-        ENDIF.
-
-        IF sy-subrc <> 0.
-          SELECT SINGLE http_nosig FROM crep_http
-            INTO lv_nosig
-            WHERE crep_id = lv_contrep.
-        ENDIF.
 
         IF sy-subrc <> 0 AND gv_crep_type <> scmst_crtyp_rfc.
           MESSAGE e002(cms) WITH lv_contrep INTO lv_dummy.
@@ -822,22 +810,10 @@ CLASS ZGOOG_CL_CONTENT_REPO_GCS IMPLEMENTATION.
     ELSE.
       " If Seckey is initial check if signature is required for the repository.
       IF lv_contrep <> space.
-        " Repository Type R3DB
-        SELECT SINGLE http_nosig FROM crep_stor
+        " Repository Type HTTP
+        SELECT SINGLE http_nosig FROM crep_http
           INTO lv_nosig
           WHERE crep_id = lv_contrep.
-
-        IF sy-subrc <> 0.
-          SELECT SINGLE http_nosig FROM crep_r3db
-            INTO lv_nosig
-            WHERE crep_id = lv_contrep.
-        ENDIF.
-        IF sy-subrc <> 0.
-          " Repository Type HTTP
-          SELECT SINGLE http_nosig FROM crep_http
-            INTO lv_nosig
-            WHERE crep_id = lv_contrep.
-        ENDIF.
         IF sy-subrc <> 0 AND gv_crep_type <> scmst_crtyp_rfc.
           MESSAGE e002(cms) WITH lv_contrep INTO lv_dummy.
           " Content Repository &1 existiert nicht
@@ -1028,9 +1004,9 @@ CLASS ZGOOG_CL_CONTENT_REPO_GCS IMPLEMENTATION.
         IF ls_off-pos >= lv_offset AND ls_off-pos <= lv_max_offset.
           APPEND ls_off TO lt_off.
         ENDIF.
-        lv_pos += 1.
+        lv_pos = lv_pos + 1.
         SHIFT lv_buffer LEFT BY lv_pos PLACES IN BYTE MODE.
-        lv_offset += lv_pos.
+        lv_offset = lv_offset + lv_pos.
       ELSE.
         CLEAR lv_buffer.
       ENDIF.
@@ -1045,7 +1021,7 @@ CLASS ZGOOG_CL_CONTENT_REPO_GCS IMPLEMENTATION.
       ELSE.
         DELETE lt_off INDEX 1.
       ENDIF.
-      lv_cnt -= 1.
+      lv_cnt = lv_cnt - 1.
     ENDWHILE.
 
     " Fill result
@@ -1554,14 +1530,16 @@ CLASS ZGOOG_CL_CONTENT_REPO_GCS IMPLEMENTATION.
         lv_object_name = <lv_docid> && '/' && <lv_docid> && '-' && <lv_compid>.
         lv_object_apnd_name = lv_object_name && 'append' ##NO_TEXT.
 
+        DATA: lv_ret_code TYPE i.
+        DATA: lv_err_text TYPE string.
         lo_gcs->insert_objects( EXPORTING iv_q_name       = lv_object_apnd_name
                                           iv_p_bucket     = lv_p_bucket
                                           is_input        = ls_input_object
                                           is_data         = lv_data
                                           iv_content_type = lv_mimetype
                                 IMPORTING es_output       = ls_output_object
-                                          ev_ret_code     = DATA(lv_ret_code)
-                                          ev_err_text     = DATA(lv_err_text) ).
+                                          ev_ret_code     = lv_ret_code
+                                          ev_err_text     = lv_err_text ).
         IF lo_gcs->is_success( lv_ret_code ) <> abap_true.
           set_error( iv_code = lv_ret_code
                      iv_text = lv_err_text ).
@@ -1577,10 +1555,11 @@ CLASS ZGOOG_CL_CONTENT_REPO_GCS IMPLEMENTATION.
 
         lv_object_name = cl_http_utility=>escape_url( unescaped = lv_object_name ).
 
+        DATA: ls_op TYPE /goog/cl_storage_v1=>ty_013.
         lo_gcs->compose_objects( EXPORTING iv_p_destination_bucket = lv_p_bucket
                                            iv_p_destination_object = lv_object_name
                                            is_input                = ls_compose_inp
-                                 IMPORTING es_output               = DATA(ls_op)
+                                 IMPORTING es_output               = ls_op
                                            ev_ret_code             = lv_ret_code
                                            ev_err_text             = lv_err_text ).
         IF lo_gcs->is_success( lv_ret_code ) <> abap_true.
@@ -1998,7 +1977,7 @@ CLASS ZGOOG_CL_CONTENT_REPO_GCS IMPLEMENTATION.
       lv_data = lo_entity->get_data( ).
 
       DESCRIBE TABLE lt_bin LINES ls_info-first_line.
-      ls_info-first_line += 1.
+      ls_info-first_line = ls_info-first_line + 1.
 
       CALL FUNCTION 'SCMS_XSTRING_TO_BINARY'
         EXPORTING
@@ -2376,8 +2355,11 @@ CLASS ZGOOG_CL_CONTENT_REPO_GCS IMPLEMENTATION.
           lo_gcs->add_common_qparam( iv_name  = 'alt'
                                      iv_value = 'media' ).
 
-          LOOP AT ls_object_list-items ASSIGNING FIELD-SYMBOL(<ls_item>).
-            lo_gcs->get_objects( EXPORTING iv_p_bucket = CONV #( gs_repo_config-bucket )
+          FIELD-SYMBOLS: <ls_item> TYPE /goog/cl_storage_v1=>ty_013.
+          LOOP AT ls_object_list-items ASSIGNING <ls_item>.
+            DATA: lv_bucket TYPE string.
+            lv_bucket = gs_repo_config-bucket.
+            lo_gcs->get_objects( EXPORTING iv_p_bucket = lv_bucket
                                            iv_p_object = <ls_item>-name
                                  IMPORTING es_output   = ls_output_object
                                            ev_ret_code = lv_ret_code
@@ -2431,8 +2413,13 @@ CLASS ZGOOG_CL_CONTENT_REPO_GCS IMPLEMENTATION.
 
               MOVE-CORRESPONDING ls_metadata TO ls_info.
               TRY.
-                  ls_info-crea_time = cl_abap_tstmp=>utclong2tstmp( CONV #( ls_output_object-time_created(19) ) ).
-                  ls_info-chng_time = cl_abap_tstmp=>utclong2tstmp( CONV #( ls_output_object-updated(19) ) ).
+                  DATA: lv_time_created TYPE utclong.
+                  lv_time_created = ls_output_object-time_created(19).
+                  ls_info-crea_time  = cl_abap_tstmp=>utclong2tstmp( lv_time_created ).
+
+                  DATA: lv_time_updated TYPE utclong.
+                  lv_time_updated = ls_output_object-updated(19).
+                  ls_info-chng_time  = cl_abap_tstmp=>utclong2tstmp( lv_time_updated ).
                   APPEND ls_info TO lt_infos.
                 CATCH cx_sy_range_out_of_bounds.
                   " Do nothing
@@ -2754,8 +2741,14 @@ CLASS ZGOOG_CL_CONTENT_REPO_GCS IMPLEMENTATION.
     ENDLOOP.
 
     MOVE-CORRESPONDING ls_metadata TO ls_info.
-    ls_info-crea_time  = cl_abap_tstmp=>utclong2tstmp( CONV #( ls_output_object-time_created(19) ) ).
-    ls_info-chng_time  = cl_abap_tstmp=>utclong2tstmp( CONV #( ls_output_object-updated(19) ) ).
+
+    DATA: lv_time_created TYPE utclong.
+    lv_time_created = ls_output_object-time_created(19).
+    ls_info-crea_time  = cl_abap_tstmp=>utclong2tstmp( lv_time_created ).
+
+    DATA: lv_time_updated TYPE utclong.
+    lv_time_updated = ls_output_object-updated(19).
+    ls_info-chng_time  = cl_abap_tstmp=>utclong2tstmp( lv_time_updated ).
     ls_info-comp_id    = <ls_comp>.
     ls_info-binary_flg = 'X'.
     APPEND ls_info TO lt_infos.
@@ -3157,8 +3150,13 @@ CLASS ZGOOG_CL_CONTENT_REPO_GCS IMPLEMENTATION.
             ENDLOOP.
 
             MOVE-CORRESPONDING ls_metadata TO ls_comp.
-            ls_comp-crea_time = cl_abap_tstmp=>utclong2tstmp( CONV #( ls_output_object-time_created(19) ) ).
-            ls_comp-chng_time = cl_abap_tstmp=>utclong2tstmp( CONV #( ls_output_object-updated(19) ) ).
+            DATA: lv_time_created TYPE utclong.
+            lv_time_created = ls_output_object-time_created(19).
+            ls_comp-crea_time = cl_abap_tstmp=>utclong2tstmp( lv_time_created ).
+
+            DATA: lv_time_updated TYPE utclong.
+            lv_time_updated = ls_output_object-updated(19).
+            ls_comp-chng_time = cl_abap_tstmp=>utclong2tstmp( lv_time_updated ).
             ls_comp-status    = 0.
             APPEND ls_comp TO lt_comps.
             CLEAR ls_comp.
@@ -3391,7 +3389,7 @@ CLASS ZGOOG_CL_CONTENT_REPO_GCS IMPLEMENTATION.
 
     lv_subrc = 0.
 
-    lv_count += 1.
+    lv_count = lv_count + 1.
     DO lv_count TIMES.
       IF sy-index < lv_count.
         lo_entity = go_server->request->get_multipart( index = sy-index ).
@@ -3514,7 +3512,7 @@ CLASS ZGOOG_CL_CONTENT_REPO_GCS IMPLEMENTATION.
       ENDIF.
 
       DESCRIBE TABLE lt_bin LINES ls_info-first_line.
-      ls_info-first_line += 1.
+      ls_info-first_line = ls_info-first_line + 1.
 
       CALL FUNCTION 'SCMS_XSTRING_TO_BINARY'
         EXPORTING
@@ -4142,7 +4140,10 @@ CLASS ZGOOG_CL_CONTENT_REPO_GCS IMPLEMENTATION.
     IF lv_contrep IS INITIAL.
       SELECT * FROM crep
         INTO CORRESPONDING FIELDS OF TABLE lt_crep_tab
-        WHERE crep_type = '03' OR crep_type = '04'.       "#EC CI_SUBRC
+        WHERE crep_type IN ( '03', '04' )
+        AND crep_id IN (
+             SELECT archive_id
+               FROM zgoog_cont_repo ).                    "#EC CI_SUBRC
     ELSE.
       SELECT * FROM crep
         INTO CORRESPONDING FIELDS OF TABLE lt_crep_tab
@@ -4450,7 +4451,7 @@ CLASS ZGOOG_CL_CONTENT_REPO_GCS IMPLEMENTATION.
       lv_data = lo_entity->get_data( ).
 
       DESCRIBE TABLE lt_bin LINES ls_info-first_line.
-      ls_info-first_line += 1.
+      ls_info-first_line = ls_info-first_line + 1.
 
       CALL FUNCTION 'SCMS_XSTRING_TO_BINARY'
         EXPORTING
@@ -4633,7 +4634,7 @@ CLASS ZGOOG_CL_CONTENT_REPO_GCS IMPLEMENTATION.
         cv_pos = lv_p.
         EXIT.
       ENDIF.
-      lv_p += 1.
+      lv_p = lv_p + 1.
     ENDWHILE.
   ENDMETHOD.
 
@@ -4749,14 +4750,14 @@ CLASS ZGOOG_CL_CONTENT_REPO_GCS IMPLEMENTATION.
     WHILE lv_pos < lv_len.
       lv_c = iv_value+lv_pos(1).
       IF lv_c = '%'.
-        lv_pos += 1.
+        lv_pos = lv_pos + 1.
         lv_rest = lv_len - lv_pos.
         IF lv_rest < 2.
           gs_error-status_code = '400'.
           EXIT.
         ENDIF.
         lv_x = iv_value+lv_pos(2).
-        lv_pos += 2.
+        lv_pos = lv_pos + 2.
 
         CALL FUNCTION 'SCMS_BIN_TO_TEXT'
           EXPORTING
@@ -4770,7 +4771,7 @@ CLASS ZGOOG_CL_CONTENT_REPO_GCS IMPLEMENTATION.
           gs_error-status_code = 500.
         ENDIF.
       ELSE.
-        lv_pos += 1.
+        lv_pos = lv_pos + 1.
       ENDIF.
       IF lv_c IS INITIAL.
         CONCATENATE rv_result gv_sp INTO rv_result.
