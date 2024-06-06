@@ -171,6 +171,11 @@
      <DESCRIPT>Test Signature</DESCRIPT>
     </SEOCOMPOTX>
     <SEOCOMPOTX>
+     <CMPNAME>CONVERT_STR_TO_TIME</CMPNAME>
+     <LANGU>E</LANGU>
+     <DESCRIPT>Convert String to Datetime</DESCRIPT>
+    </SEOCOMPOTX>
+    <SEOCOMPOTX>
      <CMPNAME>CONVERT_UPPER_LOWER</CMPNAME>
      <LANGU>E</LANGU>
      <DESCRIPT>Convert to upper and lower cases</DESCRIPT>
