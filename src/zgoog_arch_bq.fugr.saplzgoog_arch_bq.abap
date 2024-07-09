@@ -12,26 +12,23 @@
 *  See the License for the specific language governing permissions   *
 *  and limitations under the License.                                *
 **********************************************************************
-* regenerated at 02.07.2024 22:12:20
 *******************************************************************
 *   System-defined Include-files.                                 *
 *******************************************************************
-  INCLUDE LZGOOG_CONT_REPOTOP.               " Global Declarations
-  INCLUDE LZGOOG_CONT_REPOUXX.               " Function Modules
+  INCLUDE LZGOOG_ARCH_BQTOP.                 " Global Declarations
+  INCLUDE LZGOOG_ARCH_BQUXX.                 " Function Modules
 
 *******************************************************************
 *   User-defined Include-files (if necessary).                    *
 *******************************************************************
-* INCLUDE LZGOOG_CONT_REPOF...               " Subroutines
-* INCLUDE LZGOOG_CONT_REPOO...               " PBO-Modules
-* INCLUDE LZGOOG_CONT_REPOI...               " PAI-Modules
-* INCLUDE LZGOOG_CONT_REPOE...               " Events
-* INCLUDE LZGOOG_CONT_REPOP...               " Local class implement.
-* INCLUDE LZGOOG_CONT_REPOT99.               " ABAP Unit tests
-  INCLUDE LZGOOG_CONT_REPOF00                     . " subprograms
-  INCLUDE LZGOOG_CONT_REPOI00                     . " PAI modules
+* INCLUDE LZGOOG_ARCH_BQF...                 " Subroutines
+* INCLUDE LZGOOG_ARCH_BQO...                 " PBO-Modules
+* INCLUDE LZGOOG_ARCH_BQI...                 " PAI-Modules
+* INCLUDE LZGOOG_ARCH_BQE...                 " Events
+* INCLUDE LZGOOG_ARCH_BQP...                 " Local class implement.
+* INCLUDE LZGOOG_ARCH_BQT99.                 " ABAP Unit tests
+  INCLUDE LZGOOG_ARCH_BQF00                       . " subprograms
+  INCLUDE LZGOOG_ARCH_BQI00                       . " PAI modules
   INCLUDE LSVIMFXX                                . " subprograms
   INCLUDE LSVIMOXX                                . " PBO modules
   INCLUDE LSVIMIXX                                . " PAI modules
-
-INCLUDE lzgoog_cont_repof01.
