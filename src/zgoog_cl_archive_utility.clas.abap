@@ -19,8 +19,6 @@ class ZGOOG_CL_ARCHIVE_UTILITY definition
 public section.
 
   types T_MASS_TR_KEY type CHAR20 .
-  types:
-    ty_lt_files_read_sequential TYPE STANDARD TABLE OF /aif/cl_archive_as_read=>ty_file WITH DEFAULT KEY .
 
   class-methods ARCHIVE_OPEN_FOR_READ
     importing
