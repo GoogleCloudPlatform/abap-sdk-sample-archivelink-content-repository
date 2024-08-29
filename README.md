@@ -64,3 +64,16 @@ Configure below in table `ZGOOG_CONT_REPO` provided with this repository by goin
 
 ![alt_text](images/image8.jpg)
 
+
+You are now all set to start using Google Cloud Storage as Content Server.!!
+
+## Learn More:
+
+To learn more, you can watch the following YouTube Videos:\
+[![Use Google Cloud Storage to Business Attachments](https://img.youtube.com/vi/-DAt2N-q98o/0.jpg)](https://www.youtube.com/watch?v=-DAt2N-q98o)
+
+[![Use Google Cloud Storage to Archive Data](https://img.youtube.com/vi/-DAt2N-q98o/0.jpg)](https://www.youtube.com/watch?v=_VgixubN0bU&t=323s)
+
+You can also learn from the following Medium blog: [Archive your SAP Data to Google’s Cloud Storage](https://medium.com/google-cloud/archive-your-sap-data-to-googles-cloud-storage-3b6dfe6f79bd)
+
+Happy Learning!!
