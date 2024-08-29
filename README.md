@@ -72,8 +72,8 @@ You are now all set to start using Google Cloud Storage as Content Server.!!
 To learn more, you can watch the following YouTube Videos:\
 [![Use Google Cloud Storage to Business Attachments](https://img.youtube.com/vi/-DAt2N-q98o/0.jpg)](https://www.youtube.com/watch?v=-DAt2N-q98o)
 
-[![Use Google Cloud Storage to Archive Data](https://img.youtube.com/vi/-DAt2N-q98o/0.jpg)](https://www.youtube.com/watch?v=_VgixubN0bU&t=323s)
+[![Use Google Cloud Storage to Archive Data](https://img.youtube.com/vi/_VgixubN0bU/0.jpg)](https://www.youtube.com/watch?v=_VgixubN0bU)
 
-You can also learn from the following Medium blog: [Archive your SAP Data to Google’s Cloud Storage](https://medium.com/google-cloud/archive-your-sap-data-to-googles-cloud-storage-3b6dfe6f79bd)
+You can also read more on how to archive data to Cloud Storage with Archive Administration Transaction SARA from the following Medium blog: [Archive your SAP Data to Google’s Cloud Storage](https://medium.com/google-cloud/archive-your-sap-data-to-googles-cloud-storage-3b6dfe6f79bd)
 
 Happy Learning!!
