@@ -14,6 +14,7 @@ This solution is built on top of [ABAP SDK for Google Cloud](https://cloud.googl
 
 On your Google Cloud project enable the Google Cloud storage API and set up a bucket with nearline storage.
 
+**Note** : The Service Account that you have configured in the Client Key configuration should have the IAM roles Storage Object Creator `roles/storage.objectCreator` and Storage Admin `roles/storage.admin`
 
 ## Steps to setup Archive Link for Cloud Storage
 
