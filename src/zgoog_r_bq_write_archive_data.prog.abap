@@ -15,10 +15,9 @@
 REPORT zgoog_r_bq_write_archive_data.
 
 PARAMETERS: p_aobj  TYPE objct_tr01 OBLIGATORY,
-            p_mtkey TYPE char20 OBLIGATORY.
+            p_mtkey TYPE /goog/trkey MODIF ID lc1 MATCHCODE OBJECT /goog/sh_bqtr_transf_key.
 
 START-OF-SELECTION.
-
 
   DATA: lt_admi_files TYPE STANDARD TABLE OF arkey WITH DEFAULT KEY.
   DATA: lv_arkey TYPE arkey.

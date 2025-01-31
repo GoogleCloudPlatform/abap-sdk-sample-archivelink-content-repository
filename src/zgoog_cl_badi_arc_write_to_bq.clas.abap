@@ -37,8 +37,6 @@ CLASS ZGOOG_CL_BADI_ARC_WRITE_TO_BQ IMPLEMENTATION.
 
 METHOD if_ex_arc_del_appl_tabs~on_obj_del_finished.
 
-  "Experimental - Not yet implemented
-
   DATA: lv_tr_key TYPE zgoog_arch_bq-bq_tr_key.
   DATA: lv_sy_subrc TYPE syst_subrc.
   DATA: lt_return TYPE bapiret2_t.

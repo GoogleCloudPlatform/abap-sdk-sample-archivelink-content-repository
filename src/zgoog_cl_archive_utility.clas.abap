@@ -18,7 +18,7 @@ class ZGOOG_CL_ARCHIVE_UTILITY definition
 
 public section.
 
-  types T_MASS_TR_KEY type CHAR20 .
+  types T_MASS_TR_KEY type /GOOG/TRKEY .
 
   class-methods ARCHIVE_OPEN_FOR_READ
     importing
@@ -279,30 +279,30 @@ ENDMETHOD.
 
   METHOD write_tabledata_to_bq.
 
-    " Experimental - Not implemented yet
+    DATA: lo_bq_repl TYPE REF TO /goog/cl_bqtr_data_load.
 
-    " If you want to implement this yourself, replace the below code
-    " with a call to method INSERT_ALL_TABLEDATA of class /GOOG/CL_BIGQUERY_V2
-
-    DATA: lo_bq_repl TYPE REF TO object.
+    DATA: lv_table_source TYPE string.
+    lv_table_source = is_table_data-tabname.
 
     FIELD-SYMBOLS: <lt_archive_data> TYPE ANY TABLE.
 
     ASSIGN is_table_data-tabref->* TO <lt_archive_data>.
 
-    CREATE OBJECT lo_bq_repl TYPE ('ZGOOG_CL_BQ_REPL').
+    TRY.
 
-    DATA: lv_table_source TYPE string.
-    lv_table_source = is_table_data-tabname.
+        CREATE OBJECT lo_bq_repl
+          EXPORTING
+            iv_mass_tr_key = iv_mass_tr_key
+            iv_data_source = lv_table_source.
 
-    CALL METHOD lo_bq_repl->('REPLICATE_DATA')
-      EXPORTING
-        iv_mass_tr_key = iv_mass_tr_key
-        iv_data_source = lv_table_source
-        it_content     = <lt_archive_data>
-      IMPORTING
-        ev_error_code  = ev_error_code
-        et_return      = et_return.
+        lo_bq_repl->replicate_data(
+          EXPORTING
+            it_content     = <lt_archive_data>
+          IMPORTING
+            ev_error_code  = ev_error_code
+            et_return      = et_return ).
+      CATCH /goog/cx_sdk.
+    ENDTRY.
 
   ENDMETHOD.
 ENDCLASS.
