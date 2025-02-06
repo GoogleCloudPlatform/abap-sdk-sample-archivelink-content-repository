@@ -86,6 +86,8 @@ The new [BigQuery Toolkit for SAP](https://cloud.google.com/solutions/sap/docs/a
 4. When you run the [Archive Delete Program](https://help.sap.com/doc/saphelp_nw73ehp1/7.31.19/en-US/4d/8c788a910b154ee10000000a42189e/frameset.htm), the implementation ZGOOG_BADI_ARC_WRITE_TO_BQ of BADI definition ARC_DEL_FINISHED will automatically send the archive data to BigQuery. 
 5. Alternatively, you can also use program ZGOOG_R_BQ_WRITE_ARCHIVE_DATA to manually select and write archive data to BigQuery. 
 
+Note - BADI ARC_DEL_FINISHED is only available in systems with SAP_BASIS component 740 and above. Refer to note [3063034](https://me.sap.com/notes/3063034/E) for more details. If your system is not compatible, you can exclude the implementation ZGOOG_BADI_ARC_WRITE_TO_BQ when importing.
+
 ## Learn More:
 
 To learn more, you can watch the following YouTube Videos:\
