@@ -9,7 +9,7 @@ This solution utilizes Google Cloud Storage as a content repository to store SAP
 
 ## Pre-requisites
 
-This solution is built on top of [ABAP SDK for Google Cloud](https://cloud.google.com/solutions/sap/docs/abap-sdk/on-premises-or-any-cloud/whats-new). Therefore your SAP system should have the latest version of the SDK installed to proceed ahead. All the required configuration for the SDK to connect to Google Cloud APIs should be set-up following the SDK’s [authentication guide](https://cloud.google.com/solutions/sap/docs/abap-sdk/on-premises-or-any-cloud/latest/authentication).
+This solution is built on top of [ABAP SDK for Google Cloud](https://cloud.google.com/solutions/sap/docs/abap-sdk/on-premises-or-any-cloud/whats-new). Therefore your SAP system should have the latest version of the SDK (Version 1.7 or later) installed to proceed ahead. All the required configuration for the SDK to connect to Google Cloud APIs should be set-up following the SDK’s [authentication guide](https://cloud.google.com/solutions/sap/docs/abap-sdk/on-premises-or-any-cloud/latest/authentication).
 
 On your Google Cloud project enable the Google Cloud storage API and set up a bucket with nearline storage.
 
