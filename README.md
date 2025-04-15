@@ -1,13 +1,20 @@
 
 # Google Cloud Storage: Content Server for SAP
-## Latest
-> 📢 🚀[Annoucing the GA version of the Content Server Solution - Released as part of ABAP SDK V1.10](https://cloud.google.com/solutions/sap/docs/abap-sdk/on-premises-or-any-cloud/latest/implement-gcs-sap-content-repository)
+## Updates
+#### Latest
+> 📢 🚀[Annoucing the GA version of the Content Server Solution - Released as part of ABAP SDK V1.10](https://cloud.google.com/solutions/sap/docs/abap-sdk/on-premises-or-any-cloud/latest/implement-gcs-sap-content-repository)\
+       If you are already using the solution from this repo then refer to the migration guide 📖 to learn more: [Migrate from Open Source to GA version available with ABAP SDK V1.10](https://github.com/GoogleCloudPlatform/abap-sdk-sample-archivelink-content-repository/blob/main/Migration%20Guide%20for%20Content%20Repository%20from%20Open%20Source%20to%20GA%20Version.pdf)
+
+#### Previous
 > 📢 🚀[Annoucing Archive to BigQuery feature, powered by BigQuery Toolkit for SAP](#archive-to-bigquery) 
+
+***
 
 This solution utilizes Google Cloud Storage as a content repository to store SAP attachments and archive the data
 
-
 ![alt_text](images/image_architecture.jpg "Google Cloud Storage as Content Server Architecture")
+
+
 
 ## Pre-requisites
 
