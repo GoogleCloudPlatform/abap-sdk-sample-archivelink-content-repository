@@ -7,6 +7,13 @@
 
 #### Previous
 > 📢 🚀[Annoucing Archive to BigQuery feature, powered by BigQuery Toolkit for SAP](#archive-to-bigquery) 
+***
+> [!IMPORTANT]
+> With the release of the **ABAP SDK for Google Cloud V1.10** the solution contained in this repository is no more required to implement Google Cloud Storage as Content Server . 
+> Google Cloud Storage as Content Server can be directly implemented using the Handler Class for the SICF node shipped implicitly with the [ABAP SDK for Google Cloud V1.10](https://cloud.google.com/solutions/sap/docs/abap-sdk/on-premises-or-any-cloud/latest/implement-gcs-sap-content-repository)\
+> Most importantly, if you are using the solution from this repository you can consider moving to the GA solution available in the ABAP SDK. Please refer to the migration guide for for more info: [Migration Guide](https://github.com/GoogleCloudPlatform/abap-sdk-sample-archivelink-content-repository/blob/main/Migration%20Guide%20for%20Content%20Repository%20from%20Open%20Source%20to%20GA%20Version.pdf)
+> 
+> This repository will still be kept alive for documentation purposes.
 
 ***
 
