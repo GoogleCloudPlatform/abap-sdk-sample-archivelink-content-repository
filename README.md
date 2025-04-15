@@ -92,17 +92,20 @@ The new [BigQuery Toolkit for SAP](https://cloud.google.com/solutions/sap/docs/a
 ### How to configure and Archive to BigQuery
 
 1. Install and configure the latest (V1.9 or above) version of [ABAP SDK for Google Cloud](https://cloud.google.com/solutions/sap/docs/abap-sdk/on-premises-or-any-cloud/latest/install-config)
-2. Configure [BigQuery Toolkit for SAP](https://cloud.google.com/solutions/sap/docs/abap-sdk/on-premises-or-any-cloud/latest/bq-toolkit-for-sap-configuration). Make a note of Data Transfer Key configured in Tcode /GOOG/BQTR_SETTINGS
-3. Configure entries in table ZGOOG_ARCH_BQ using SM30
+2. Configure [BigQuery Toolkit for SAP](https://cloud.google.com/solutions/sap/docs/abap-sdk/on-premises-or-any-cloud/latest/bq-toolkit-for-sap-configuration). Make a note of Data Transfer Key configured in Tcode `/GOOG/BQTR_SETTINGS`
+3. Configure entries in table `ZGOOG_ARCH_BQ` using SM30
    | Column                                 | Value         |
    | ------------------------------------   | ------------- |
    | Archiving Object                       | Name of the archiving object for which the data should be replicated to BigQuery |
-   | Data Transfer Key                      | BigQuery Data Transfer Key from Tcode /GOOG/BQTR_SETTINGS |
+   | Data Transfer Key                      | BigQuery Data Transfer Key from Tcode `/GOOG/BQTR_SETTINGS` |
    | Is Setting Active Flag                 | Enabling this write archive data to BigQuery |
-4. When you run the [Archive Delete Program](https://help.sap.com/doc/saphelp_nw73ehp1/7.31.19/en-US/4d/8c788a910b154ee10000000a42189e/frameset.htm), the implementation ZGOOG_BADI_ARC_WRITE_TO_BQ of BADI definition ARC_DEL_FINISHED will automatically send the archive data to BigQuery. 
-5. Alternatively, you can also use program ZGOOG_R_BQ_WRITE_ARCHIVE_DATA to manually select and write archive data to BigQuery. 
+4. When you run the [Archive Delete Program](https://help.sap.com/doc/saphelp_nw73ehp1/7.31.19/en-US/4d/8c788a910b154ee10000000a42189e/frameset.htm), the implementation `ZGOOG_BADI_ARC_WRITE_TO_BQ` of BADI definition `ARC_DEL_FINISHED` will automatically send the archive data to BigQuery. 
+5. Alternatively, you can also use program `ZGOOG_R_BQ_WRITE_ARCHIVE_DATA` to manually select and write archive data to BigQuery. 
 
-Note - BADI ARC_DEL_FINISHED is only available in systems with SAP_BASIS component 740 and above. Refer to note [3063034](https://me.sap.com/notes/3063034/E) for more details. If your system is not compatible, you can exclude the implementation ZGOOG_BADI_ARC_WRITE_TO_BQ when importing.
+>[!NOTE]
+> BADI `ARC_DEL_FINISHED` is only available in systems with SAP_BASIS component 740 and above. \
+> Refer to note [3063034](https://me.sap.com/notes/3063034/E) for more details. \
+>If your system is not compatible, you can exclude the implementation `ZGOOG_BADI_ARC_WRITE_TO_BQ` when importing.
 
 ## Learn More:
 
@@ -111,6 +114,7 @@ To learn more, you can watch the following YouTube Videos:\
 
 [![Use Google Cloud Storage to Archive Data](https://img.youtube.com/vi/_VgixubN0bU/0.jpg)](https://www.youtube.com/watch?v=_VgixubN0bU)
 
-You can also read more on how to archive data to Cloud Storage with Archive Administration Transaction SARA from the following Medium blog: [Archive your SAP Data to Google’s Cloud Storage](https://medium.com/google-cloud/archive-your-sap-data-to-googles-cloud-storage-3b6dfe6f79bd)
+>[!TIP]
+>You can also read more on how to archive data to Cloud Storage with Archive Administration Transaction `SARA` in the Medium blog [Archive your SAP Data to Google’s Cloud Storage](https://medium.com/google-cloud/archive-your-sap-data-to-googles-cloud-storage-3b6dfe6f79bd)
 
 Happy Learning!!
