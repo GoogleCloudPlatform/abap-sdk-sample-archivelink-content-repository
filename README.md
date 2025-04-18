@@ -2,8 +2,10 @@
 # Google Cloud Storage: Content Server for SAP
 ## Updates
 #### Latest
-> 📢 🚀[Annoucing the GA version of the Content Server Solution - Released as part of ABAP SDK V1.10](https://cloud.google.com/solutions/sap/docs/abap-sdk/on-premises-or-any-cloud/latest/implement-gcs-sap-content-repository)\
-       If you are already using the solution from this repo then refer to the migration guide 📖 to learn more: [Migrate from Open Source to GA version available with ABAP SDK V1.10](https://github.com/GoogleCloudPlatform/abap-sdk-sample-archivelink-content-repository/blob/main/Migration%20Guide%20for%20Content%20Repository%20from%20Open%20Source%20to%20GA%20Version.pdf)
+> 📢 🚀[Annoucing the GA version of the Content Server Solution - Released as part of ABAP SDK V1.10](https://cloud.google.com/solutions/sap/docs/abap-sdk/on-premises-or-any-cloud/latest/implement-gcs-sap-content-repository), which replaces this sample solution\
+> IMPORTANT: If you are already using the solution from this repo then refer to the migration guide 📖 to learn more: [Migrate from Open Source to GA version available with ABAP SDK V1.10](https://github.com/GoogleCloudPlatform/abap-sdk-sample-archivelink-content-repository/blob/main/Migration%20Guide%20for%20Content%20Repository%20from%20Open%20Source%20to%20GA%20Version.pdf)
+>
+> This repo remains as a reference if you are an existing user or want to experiment by adding your own customizations. The standalone [Archive to BigQuery](#archive-to-bigquery) feature is also only avaialable in this repo.
 
 #### Previous
 > 📢 🚀[Annoucing Archive to BigQuery feature, powered by BigQuery Toolkit for SAP](#archive-to-bigquery) 
