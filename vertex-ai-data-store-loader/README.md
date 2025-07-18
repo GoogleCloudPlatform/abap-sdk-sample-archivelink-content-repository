@@ -25,6 +25,7 @@ For this solution to work, you must implement Google Cloud Storage Content Repos
 4. Configure [BigQuery Toolkit](https://cloud.google.com/solutions/sap/docs/abap-sdk/on-premises-or-any-cloud/latest/bq-toolkit-for-sap-overview) for ArchiveLink Tables TOA01, TOA02, TOA03 etc. You can get Link tables from Tcode OAC3.
 5. Configure entries in table ZGOOG_ALINK_BQ with [Content Repository](https://cloud.google.com/solutions/sap/docs/abap-sdk/on-premises-or-any-cloud/latest/implement-gcs-sap-content-repository#configure-content-repository-for-gcs) Name and [BigQuery Toolkit Mass Transfer Key](https://cloud.google.com/solutions/sap/docs/abap-sdk/on-premises-or-any-cloud/latest/bq-toolkit-for-sap-configuration#configure-connection)
 
+When you save an attachment in SAP, the implementation of BAPI OA_BADI_LINK will asynchronously insert the ArchiveLink entry saved in TOA01/2/3 tables into corresponding tables in BigQuery. These entries will be used by the Cloud Run to synchronize Vertex AI Data store 
 
 ## BigQuery Setup
 Run SQL statements from [BigQuery_DDL.sql](./BigQuery_DDL.sql) in your [BigQuery Console](https://console.cloud.google.com/bigquery).
@@ -105,4 +106,18 @@ gcloud run jobs deploy "${SERVICE_NAME}" \
 
 ## Schedule Cloud Run Job
 
-Follow the [instruction](https://cloud.google.com/run/docs/execute/jobs-on-schedule#using-scheduler) to schedule this job to run on a periodic basis
+Follow the [instruction](https://cloud.google.com/run/docs/execute/jobs-on-schedule#using-scheduler) to schedule this job to run on a periodic basis.
+
+This Cloud Run Job will -
+1) Find all newly inserted documents IDs from Archive Link tables in BigQuery
+2) Extract corresponding URI and Metadata of these documents from Google Cloud Storage Bucket
+3) Send these documents to Vertex AI Data Store for indexing
+
+## Link Datastore to Agentspace
+1) Go to [Google Cloud Agentspace](https://console.cloud.google.com/agentspace/)
+2) Click Manage on the Agentspace tile
+3) Select your Agentspace App from the list of Apps
+4) On the left navigation page, go to Connected data stores
+5) Click Add existing data stores and select the data store name you created above
+
+After linking, newly added documents will be available for Search through Agentspace App
