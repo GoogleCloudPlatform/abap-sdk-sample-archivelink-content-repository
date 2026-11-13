@@ -755,18 +755,28 @@ CLASS ZGOOG_CL_CONTENT_REPO_GCS IMPLEMENTATION.
       IF ls_param-usage = gv_parameter_sec_used.
         CONCATENATE lv_message ls_param-value INTO lv_message.
       ENDIF.
-      IF ls_param-name = 'secKey'.
-        lv_seckey = ls_param-value.
-      ELSEIF ls_param-name = 'accessMode'.
-        lv_amode = url_hex_decode( iv_value = ls_param-value ).
-      ELSEIF ls_param-name = 'authId'.
-        lv_authid = url_hex_decode( iv_value = ls_param-value ).
-      ELSEIF ls_param-name = 'expiration'.
-        lv_expiration = url_hex_decode( iv_value = ls_param-value ).
-      ELSEIF ls_param-name = 'contRep'.
-        lv_contrep = url_hex_decode( iv_value = ls_param-value ).
-      ENDIF.
     ENDLOOP.
+
+    READ TABLE gt_parameters INTO ls_param WITH KEY name = 'secKey'. "#EC CI_STDSEQ
+    IF sy-subrc = 0.
+      lv_seckey = ls_param-value.
+    ENDIF.
+    READ TABLE gt_parameters INTO ls_param WITH KEY name = 'accessMode'. "#EC CI_STDSEQ
+    IF sy-subrc = 0.
+      lv_amode = url_hex_decode( iv_value = ls_param-value ).
+    ENDIF.
+    READ TABLE gt_parameters INTO ls_param WITH KEY name = 'authId'. "#EC CI_STDSEQ
+    IF sy-subrc = 0.
+      lv_authid = url_hex_decode( iv_value = ls_param-value ).
+    ENDIF.
+    READ TABLE gt_parameters INTO ls_param WITH KEY name = 'expiration'. "#EC CI_STDSEQ
+    IF sy-subrc = 0.
+      lv_expiration = url_hex_decode( iv_value = ls_param-value ).
+    ENDIF.
+    READ TABLE gt_parameters INTO ls_param WITH KEY name = 'contRep'. "#EC CI_STDSEQ
+    IF sy-subrc = 0.
+      lv_contrep = url_hex_decode( iv_value = ls_param-value ).
+    ENDIF.
 
     IF iv_contrep IS SUPPLIED.
       lv_contrep = iv_contrep.
@@ -813,6 +823,12 @@ CLASS ZGOOG_CL_CONTENT_REPO_GCS IMPLEMENTATION.
         rv_signature = 'X'.
       ENDIF.
     ELSE.
+      IF lv_contrep IS INITIAL.
+        MESSAGE e109(cms) WITH lv_contrep INTO lv_dummy.
+        sys_error_set( ).
+        gs_error-status_code = 401.
+        EXIT.
+      ENDIF.
       " If Seckey is initial check if signature is required for the repository.
       IF lv_contrep <> space.
         " Repository Type HTTP
@@ -1401,6 +1417,13 @@ CLASS ZGOOG_CL_CONTENT_REPO_GCS IMPLEMENTATION.
       SPLIT ls_parameter-name AT '='
             INTO ls_parameter-name ls_parameter-value.
       ls_parameter-name = url_hex_decode( iv_value = ls_parameter-name ).
+      READ TABLE gt_parameters TRANSPORTING NO FIELDS
+        WITH KEY name = ls_parameter-name.               "#EC CI_STDSEQ
+      IF sy-subrc = 0.
+        set_error( iv_code = 400
+                   iv_text = |Duplicate query parameter: { ls_parameter-name }| ) ##NO_TEXT.
+        RETURN.
+      ENDIF.
       APPEND ls_parameter TO gt_parameters.
     ENDWHILE.
 
