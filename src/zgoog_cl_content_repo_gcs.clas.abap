@@ -754,29 +754,22 @@ CLASS ZGOOG_CL_CONTENT_REPO_GCS IMPLEMENTATION.
     LOOP AT gt_parameters INTO ls_param.
       IF ls_param-usage = gv_parameter_sec_used.
         CONCATENATE lv_message ls_param-value INTO lv_message.
+        IF ls_param-name = 'accessMode' AND lv_amode IS INITIAL.
+          lv_amode = url_hex_decode( iv_value = ls_param-value ).
+        ELSEIF ls_param-name = 'authId' AND lv_authid IS INITIAL.
+          lv_authid = url_hex_decode( iv_value = ls_param-value ).
+        ELSEIF ls_param-name = 'expiration' AND lv_expiration IS INITIAL.
+          lv_expiration = url_hex_decode( iv_value = ls_param-value ).
+        ELSEIF ls_param-name = 'contRep' AND lv_contrep IS INITIAL.
+          lv_contrep = url_hex_decode( iv_value = ls_param-value ).
+        ENDIF.
+      ENDIF.
+      IF ls_param-name = 'secKey' AND lv_seckey IS INITIAL.
+        lv_seckey = ls_param-value.
+      ELSEIF ls_param-name = 'contRep' AND lv_contrep IS INITIAL.
+        lv_contrep = url_hex_decode( iv_value = ls_param-value ).
       ENDIF.
     ENDLOOP.
-
-    READ TABLE gt_parameters INTO ls_param WITH KEY name = 'secKey'. "#EC CI_STDSEQ
-    IF sy-subrc = 0.
-      lv_seckey = ls_param-value.
-    ENDIF.
-    READ TABLE gt_parameters INTO ls_param WITH KEY name = 'accessMode'. "#EC CI_STDSEQ
-    IF sy-subrc = 0.
-      lv_amode = url_hex_decode( iv_value = ls_param-value ).
-    ENDIF.
-    READ TABLE gt_parameters INTO ls_param WITH KEY name = 'authId'. "#EC CI_STDSEQ
-    IF sy-subrc = 0.
-      lv_authid = url_hex_decode( iv_value = ls_param-value ).
-    ENDIF.
-    READ TABLE gt_parameters INTO ls_param WITH KEY name = 'expiration'. "#EC CI_STDSEQ
-    IF sy-subrc = 0.
-      lv_expiration = url_hex_decode( iv_value = ls_param-value ).
-    ENDIF.
-    READ TABLE gt_parameters INTO ls_param WITH KEY name = 'contRep'. "#EC CI_STDSEQ
-    IF sy-subrc = 0.
-      lv_contrep = url_hex_decode( iv_value = ls_param-value ).
-    ENDIF.
 
     IF iv_contrep IS SUPPLIED.
       lv_contrep = iv_contrep.
@@ -823,12 +816,6 @@ CLASS ZGOOG_CL_CONTENT_REPO_GCS IMPLEMENTATION.
         rv_signature = 'X'.
       ENDIF.
     ELSE.
-      IF lv_contrep IS INITIAL.
-        MESSAGE e109(cms) WITH lv_contrep INTO lv_dummy.
-        sys_error_set( ).
-        gs_error-status_code = 401.
-        EXIT.
-      ENDIF.
       " If Seckey is initial check if signature is required for the repository.
       IF lv_contrep <> space.
         " Repository Type HTTP
@@ -1417,12 +1404,11 @@ CLASS ZGOOG_CL_CONTENT_REPO_GCS IMPLEMENTATION.
       SPLIT ls_parameter-name AT '='
             INTO ls_parameter-name ls_parameter-value.
       ls_parameter-name = url_hex_decode( iv_value = ls_parameter-name ).
-      READ TABLE gt_parameters TRANSPORTING NO FIELDS
-        WITH KEY name = ls_parameter-name.               "#EC CI_STDSEQ
+      READ TABLE gt_parameters WITH KEY name = ls_parameter-name
+        TRANSPORTING NO FIELDS.                           "#EC CI_STDSEQ
       IF sy-subrc = 0.
-        set_error( iv_code = 400
-                   iv_text = |Duplicate query parameter: { ls_parameter-name }| ) ##NO_TEXT.
-        RETURN.
+        gs_error-status_code = 400.
+        EXIT.
       ENDIF.
       APPEND ls_parameter TO gt_parameters.
     ENDWHILE.
@@ -3355,6 +3341,7 @@ CLASS ZGOOG_CL_CONTENT_REPO_GCS IMPLEMENTATION.
           lo_entity        TYPE REF TO if_http_entity.
 
     DATA: lv_docid       TYPE string,
+          lv_query_docid TYPE string,
           lv_pversion    TYPE string ##NEEDED,
           lv_seckey      TYPE string,
           lv_smand       TYPE c LENGTH 1,
@@ -3397,8 +3384,8 @@ CLASS ZGOOG_CL_CONTENT_REPO_GCS IMPLEMENTATION.
                                iv_mandatory = 'S'
                      IMPORTING er_value     = lo_contrep ).
 
-    lv_docid = get_parameter( iv_name      = 'docId'
-                              iv_mandatory = 'S' ).
+    lv_query_docid = get_parameter( iv_name      = 'docId'
+                                    iv_mandatory = 'S' ).
     lv_pversion = get_parameter( iv_name      = 'pVersion'
                                  iv_mandatory = 'X' ).
     lv_seckey   = get_parameter( iv_name = 'secKey' ).
@@ -3448,6 +3435,13 @@ CLASS ZGOOG_CL_CONTENT_REPO_GCS IMPLEMENTATION.
         lv_mimetype = lo_entity->get_header_field( name = 'Content-Type' ) ##NO_TEXT.
         lv_compid = lo_entity->get_header_field( name = 'X-compId' ) ##NO_TEXT.
         lv_docid = lo_entity->get_header_field( name = 'X-docId' ) ##NO_TEXT.
+
+        IF lv_docid IS INITIAL.
+          lv_docid = lv_query_docid.
+        ELSEIF lv_query_docid IS NOT INITIAL AND lv_docid <> lv_query_docid.
+          gs_error-status_code = 401.
+          RETURN.
+        ENDIF.
 
         IF lv_compid IS INITIAL.   " workarround
           CONTINUE.
@@ -3618,9 +3612,14 @@ CLASS ZGOOG_CL_CONTENT_REPO_GCS IMPLEMENTATION.
     lv_pversion = get_parameter( iv_name      = 'pVersion'
                                  iv_mandatory = 'X' ).
     lv_authid = get_parameter( iv_name      = 'authId'
-                               iv_mandatory = 'X' ).
+                               iv_mandatory = 'S' ).
 
     check_parameter_consistence( ).
+    IF gs_error IS NOT INITIAL.
+      RETURN.
+    ENDIF.
+
+    check_authority( iv_write = 1 ).
     IF gs_error IS NOT INITIAL.
       RETURN.
     ENDIF.
